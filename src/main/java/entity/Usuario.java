@@ -1,7 +1,6 @@
 package entity;
 
 import entity.enums.Sexo;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,19 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Usuario")
-@Getter @Setter
 public class Usuario extends Auditable {
 
     @Id
@@ -48,18 +42,32 @@ public class Usuario extends Auditable {
     @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "senha", nullable = false)
-    @JsonIgnore
-    private String senha;
+    @Column(name = "telefone", length = 20)
+    private String telefone;
+
+    @Column(name = "logradouro", length = 255)
+    private String logradouro;
+
+    @Column(name = "numero", length = 20)
+    private String numero;
+
+    @Column(name = "complemento", length = 100)
+    private String complemento;
+
+    @Column(name = "bairro", length = 100)
+    private String bairro;
+
+    @Column(name = "cidade", length = 100)
+    private String cidade;
+
+    @Column(name = "estado", length = 2)
+    private String estado;
+
+    @Column(name = "cep", length = 8)
+    private String cep;
 
     @Column(name = "ativo")
-    private boolean ativo = true;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<TelefoneUsuario> telefones = new HashSet<>();
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<EnderecoUsuario> enderecos = new HashSet<>();
+    private boolean ativo = true, nullable = false;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

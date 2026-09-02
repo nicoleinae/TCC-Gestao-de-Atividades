@@ -1,5 +1,6 @@
 package entity;
 
+import entity.enums.StatusAtividade;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,10 +42,10 @@ public class Atividade {
     @Column(name = "data_inicio")
     private LocalDate dataInicio;
 
-    @Column(name = "data_fim")
-    private LocalDate dataFim;
+    @Column(name = "horário_inicio")
+    private String horarioInicio;
 
     @Column(name = "status")
-    private boolean status = true;
+    private StatusAtividade status = StatusAtividade.RASCUNHO;
 
 }

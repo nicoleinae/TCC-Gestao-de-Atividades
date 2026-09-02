@@ -9,15 +9,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-@Table(name = "Inscricao", uniqueConstraints = @jakarta.persistence.UniqueConstraint(columnNames = {"usuario_id", "atividade_id"}))
-@Getter @Setter
+@Table(
+        name = "Inscricao",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                name = "uk_inscricao_usuario_atividade",
+                columnNames = {"usuario_id", "atividade_id"}
+            )
+        })
 public class Inscricao {
 
     @Id
@@ -35,9 +40,6 @@ public class Inscricao {
     @CreationTimestamp
     @Column(name = "data_inscricao", updatable = false)
     private LocalDateTime dataInscricao;
-
-    @Column(name = "presenca_confirmada")
-    private boolean presencaConfirmada = false;
 
 }
 

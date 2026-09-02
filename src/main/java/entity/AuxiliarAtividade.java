@@ -9,9 +9,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "AuxiliarAtividade")
+@Table(
+        name = "AuxiliarAtividade",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_auxiliar_atividade",
+                        columnNames = {"atividade_id", "auxiliar_id"}
+                )
+        }
+)
 public class AuxiliarAtividade {
 
     @Id
@@ -23,10 +32,10 @@ public class AuxiliarAtividade {
     private Atividade atividade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auxiliar_id")
+    @JoinColumn(name = "auxiliar_id", nullable = false)
     private Usuario auxiliar;
 
-    @Column(name = "status")
-    private boolean status = true;
+    @Column(name = "ativo", nullable = false)
+    private boolean ativo = true;
 
 }

@@ -32,7 +32,7 @@ public class Certificado {
     private String caminhoArquivo;
 
     @CreationTimestamp
-    @Column(name = "data_emissao", updatable = false)
+    @Column(name = "data_emissao", nullable = false, updatable = false)
     private LocalDateTime dataEmissao;
 
 }
