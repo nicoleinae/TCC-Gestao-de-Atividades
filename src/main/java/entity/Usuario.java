@@ -19,9 +19,13 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Usuario")
+@Getter @Setter
 public class Usuario extends Auditable {
 
     @Id
@@ -45,6 +49,7 @@ public class Usuario extends Auditable {
     private String email;
 
     @Column(name = "senha", nullable = false)
+    @JsonIgnore
     private String senha;
 
     @Column(name = "ativo")

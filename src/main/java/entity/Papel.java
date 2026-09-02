@@ -8,12 +8,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Papel")
+@Getter @Setter
 public class Papel {
 
     @Id
@@ -24,6 +28,7 @@ public class Papel {
     private String nome;
 
     @ManyToMany(mappedBy = "papeis", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Usuario> usuarios = new HashSet<>();
 
 }

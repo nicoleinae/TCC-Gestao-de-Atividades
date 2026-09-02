@@ -14,9 +14,13 @@ import jakarta.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Instituicao")
+@Getter @Setter
 public class Instituicao {
 
     @Id
@@ -37,12 +41,15 @@ public class Instituicao {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "responsavel_id")
+    @JsonIgnore
     private Usuario responsavel;
 
     @OneToMany(mappedBy = "instituicao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<TelefoneInstituicao> telefones = new HashSet<>();
 
     @OneToMany(mappedBy = "instituicao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<EnderecoInstituicao> enderecos = new HashSet<>();
 
 }

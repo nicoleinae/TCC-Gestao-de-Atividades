@@ -12,9 +12,12 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "Inscricao")
+@Table(name = "Inscricao", uniqueConstraints = @jakarta.persistence.UniqueConstraint(columnNames = {"usuario_id", "atividade_id"}))
+@Getter @Setter
 public class Inscricao {
 
     @Id

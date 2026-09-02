@@ -12,9 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Atividade")
+@Getter @Setter
 public class Atividade {
 
     @Id
