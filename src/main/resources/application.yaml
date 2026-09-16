@@ -2,11 +2,17 @@ spring:
   application:
     name: GestaoEventos
   datasource:
-    url: jdbc:mysql://localhost:3306/tcc
-    username: root
-    password: admin
+    url: ${DB_URL:jdbc:mysql://localhost:3306/tcc}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+app:
+  security:
+    jwt-secret: ${JWT_SECRET:altere-esta-chave-em-producao-gestao-eventos}
+    jwt-expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+  certificados:
+    diretorio: ${CERTIFICADOS_DIR:./dados/certificados}
