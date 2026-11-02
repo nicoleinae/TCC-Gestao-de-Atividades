@@ -2,13 +2,13 @@ package web.gestaoeventos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import web.gestaoeventos.entity.enums.TipoPapel;
 import web.gestaoeventos.repository.LoginRepository;
 
 @Configuration
@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .map(login -> User.withUsername(login.getEmail())
                         .password(login.getSenha())
                         .authorities(login.getUsuario().getPapeis().stream()
+                                .filter(papel -> papel.getNome() != TipoPapel.COLABORADOR)
                                 .map(papel -> "ROLE_" + papel.getNome())
                                 .toArray(String[]::new))
                         .build())
@@ -64,16 +65,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**", "/", "/index.html", "/css/**", "/js/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/atividades/*/auxiliares/**")
-                        .hasAnyRole("COLABORADOR", "AUXILIAR")
-                        .requestMatchers(HttpMethod.POST, "/atividades/*/auxiliares/**")
-                        .hasRole("COLABORADOR")
-                        .requestMatchers(HttpMethod.DELETE, "/atividades/*/auxiliares/**")
-                        .hasRole("COLABORADOR")
-                        .requestMatchers("/atividades/**").hasRole("COLABORADOR")
-                        .requestMatchers(HttpMethod.POST, "/instituicoes/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.PUT, "/instituicoes/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.DELETE, "/instituicoes/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/atividades/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/instituicoes/**").authenticated()
                         .requestMatchers("/papeis/**", "/usuarios/*/papel").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.POST, "/solicitacoes-colaborador")
                         .authenticated()

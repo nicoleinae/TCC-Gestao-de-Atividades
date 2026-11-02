@@ -1,59 +1,73 @@
 package web.gestaoeventos.service;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import web.gestaoeventos.dto.InstituicaoDtos;
+import web.gestaoeventos.dto.InstituicaoDtos.InstituicaoRequest;
+import web.gestaoeventos.dto.InstituicaoDtos.InstituicaoResponse;
 import web.gestaoeventos.entity.Instituicao;
 import web.gestaoeventos.entity.Usuario;
+import web.gestaoeventos.mapper.InstituicaoMapper;
 import web.gestaoeventos.repository.InstituicaoRepository;
 import web.gestaoeventos.repository.UsuarioRepository;
+
+import java.util.List;
 
 @Service
 public class InstituicaoService {
 
     private final InstituicaoRepository instituicaoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final InstituicaoMapper instituicaoMapper;
 
     public InstituicaoService(
             InstituicaoRepository instituicaoRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository,
+            InstituicaoMapper instituicaoMapper) {
         this.instituicaoRepository = instituicaoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.instituicaoMapper = instituicaoMapper;
     }
 
     @Transactional
-    public InstituicaoDtos.InstituicaoResponse criar(
-            InstituicaoDtos.InstituicaoRequest request) {
-        Instituicao instituicao = new Instituicao();
-        preencher(instituicao, request);
-        return converter(instituicaoRepository.save(instituicao));
+    public InstituicaoResponse criar(
+            String emailCriador,
+            InstituicaoRequest request) {
+        Usuario criador = usuarioRepository.findByEmailIgnoreCase(emailCriador)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Usuário não encontrado"));
+
+        Instituicao instituicao = instituicaoMapper.toEntity(request);
+        instituicao.setResponsavel(criador);
+        instituicao = instituicaoRepository.save(instituicao);
+
+        criador.getInstituicoes().add(instituicao);
+        usuarioRepository.save(criador);
+
+        return instituicaoMapper.toResponse(instituicao);
     }
 
     @Transactional(readOnly = true)
-    public List<InstituicaoDtos.InstituicaoResponse> listar() {
+    public List<InstituicaoResponse> listar() {
         return instituicaoRepository.findAllByAtivoTrueOrderByNomeAsc().stream()
-                .map(this::converter)
+                .map(instituicaoMapper::toResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public InstituicaoDtos.InstituicaoResponse buscarPorId(Long id) {
-        return converter(buscarAtiva(id));
+    public InstituicaoResponse buscarPorId(Long id) {
+        return instituicaoMapper.toResponse(buscarAtiva(id));
     }
 
     @Transactional
-    public InstituicaoDtos.InstituicaoResponse atualizar(
+    public InstituicaoRequest atualizar(
             Long id,
-            InstituicaoDtos.InstituicaoRequest request) {
+            InstituicaoRequest request) {
         Instituicao instituicao = buscarAtiva(id);
-        preencher(instituicao, request);
-
-        return converter(instituicaoRepository.save(instituicao));
+        instituicaoMapper.update(request, instituicao);
+        return instituicaoMapper.toRequest(instituicaoRepository.save(instituicao));
     }
 
     @Transactional
@@ -78,49 +92,4 @@ public class InstituicaoService {
         return instituicao;
     }
 
-    private void preencher(
-            Instituicao instituicao,
-            InstituicaoDtos.InstituicaoRequest request) {
-        instituicao.setNome(request.nome().trim());
-        instituicao.setCnpj(request.cnpj());
-        instituicao.setEmail(request.email());
-        instituicao.setTelefone(request.telefone());
-        instituicao.setLogradouro(request.logradouro());
-        instituicao.setNumero(request.numero());
-        instituicao.setComplemento(request.complemento());
-        instituicao.setBairro(request.bairro());
-        instituicao.setCidade(request.cidade());
-        instituicao.setEstado(request.estado());
-        instituicao.setCep(request.cep());
-
-        if (request.responsavelId() != null) {
-            Usuario responsavel = usuarioRepository.findById(request.responsavelId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            "Responsável não encontrado"));
-            instituicao.setResponsavel(responsavel);
-        }
-    }
-
-    private InstituicaoDtos.InstituicaoResponse converter(Instituicao instituicao) {
-        Long responsavelId = instituicao.getResponsavel() == null
-                ? null
-                : instituicao.getResponsavel().getId();
-
-        return new InstituicaoDtos.InstituicaoResponse(
-                instituicao.getId(),
-                instituicao.getNome(),
-                instituicao.getCnpj(),
-                instituicao.getEmail(),
-                instituicao.getTelefone(),
-                instituicao.getLogradouro(),
-                instituicao.getNumero(),
-                instituicao.getComplemento(),
-                instituicao.getBairro(),
-                instituicao.getCidade(),
-                instituicao.getEstado(),
-                instituicao.getCep(),
-                responsavelId,
-                instituicao.isAtivo());
-    }
 }

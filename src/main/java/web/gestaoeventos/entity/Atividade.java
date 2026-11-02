@@ -47,4 +47,7 @@ public class Atividade {
 
     @Column(name = "status")
     private StatusAtividade status = StatusAtividade.RASCUNHO;
+
+    @Column(name = "ativo", nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
+    private boolean ativo = true;
 }
