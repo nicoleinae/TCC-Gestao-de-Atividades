@@ -5,7 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import web.gestaoeventos.dto.AtividadeDtos;
+import web.gestaoeventos.dto.AtividadeDtos.AlterarStatusRequest;
+import web.gestaoeventos.dto.AtividadeDtos.AtividadeResponse;
+import web.gestaoeventos.dto.AtividadeDtos.CriarAtividadeRequest;
 import web.gestaoeventos.dto.AtualizarAtividadeRequest;
 import web.gestaoeventos.entity.Atividade;
 import web.gestaoeventos.entity.Instituicao;
@@ -37,9 +39,9 @@ public class AtividadeService {
     }
 
     @Transactional
-    public AtividadeDtos.AtividadeResponse criar(
+    public AtividadeResponse criar(
             Authentication authentication,
-            AtividadeDtos.CriarAtividadeRequest request) {
+            CriarAtividadeRequest request) {
         Usuario usuario = buscarUsuario(authentication.getName());
         Instituicao instituicao = buscarInstituicao(request.instituicaoId());
         validarVinculo(usuario, instituicao);
@@ -51,7 +53,7 @@ public class AtividadeService {
     }
 
     @Transactional(readOnly = true)
-    public List<AtividadeDtos.AtividadeResponse> listar(String email) {
+    public List<AtividadeResponse> listar(String email) {
 
         return atividadeRepository
                 .findAtividadesByAtivoTrue()
@@ -61,13 +63,13 @@ public class AtividadeService {
     }
 
     @Transactional(readOnly = true)
-    public AtividadeDtos.AtividadeResponse buscarPorId(String email, Long id) {
+    public AtividadeResponse buscarPorId(String email, Long id) {
         Atividade atividade = buscarAtiva(id);
         return atividadeMapper.toResponse(atividade);
     }
 
     @Transactional
-    public AtividadeDtos.AtividadeResponse atualizar(
+    public AtividadeResponse atualizar(
             String email,
             Long id,
             AtualizarAtividadeRequest request) {
@@ -81,10 +83,10 @@ public class AtividadeService {
     }
 
     @Transactional
-    public AtividadeDtos.AtividadeResponse alterarStatus(
+    public AtividadeResponse alterarStatus(
             String email,
             Long id,
-            AtividadeDtos.AlterarStatusRequest request) {
+            AlterarStatusRequest request) {
         Usuario usuario = buscarUsuario(email);
         Atividade atividade = buscarAtiva(id);
         validarVinculo(usuario, atividade.getInstituicao());

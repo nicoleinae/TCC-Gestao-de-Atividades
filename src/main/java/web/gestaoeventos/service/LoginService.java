@@ -6,7 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import web.gestaoeventos.dto.LoginDtos;
+import web.gestaoeventos.dto.LoginDtos.LoginRequest;
+import web.gestaoeventos.dto.LoginDtos.TokenResponse;
 import web.gestaoeventos.entity.Usuario;
 import web.gestaoeventos.repository.UsuarioRepository;
 import web.gestaoeventos.security.TokenService;
@@ -29,7 +30,7 @@ public class LoginService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public LoginDtos.TokenResponse login(LoginDtos.LoginRequest request) {
+    public TokenResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email().trim().toLowerCase(Locale.ROOT),
@@ -41,6 +42,6 @@ public class LoginService {
                         HttpStatus.UNAUTHORIZED,
                         "Credenciais inválidas"));
 
-        return new LoginDtos.TokenResponse(tokenService.gerar(usuario), "Bearer");
+        return new TokenResponse(tokenService.gerar(usuario), "Bearer");
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import web.gestaoeventos.dto.CadastroDtos;
+import web.gestaoeventos.dto.CadastroDtos.CadastroRequest;
 import web.gestaoeventos.entity.Login;
 import web.gestaoeventos.entity.Papel;
 import web.gestaoeventos.entity.Usuario;
@@ -38,7 +38,7 @@ public class CadastroService {
     }
 
     @Transactional
-    public void cadastrar(CadastroDtos.CadastroRequest request) {
+    public void cadastrar(CadastroRequest request) {
         String email = authMapper.normalizarEmail(request.email());
         String cpf = authMapper.normalizarCpf(request.cpf());
 

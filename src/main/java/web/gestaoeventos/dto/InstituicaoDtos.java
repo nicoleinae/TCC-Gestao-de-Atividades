@@ -20,8 +20,7 @@ public final class InstituicaoDtos {
             @Size(max = 100) String bairro,
             @Size(max = 100) String cidade,
             @Size(max = 2) String estado,
-            @Size(max = 8) String cep,
-            Long responsavelId) {
+            @Size(max = 8) String cep) {
     }
 
     public record InstituicaoResponse(

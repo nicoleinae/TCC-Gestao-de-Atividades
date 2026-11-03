@@ -1,11 +1,10 @@
 package web.gestaoeventos.repository;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import web.gestaoeventos.entity.Usuario;
 import web.gestaoeventos.entity.enums.TipoPapel;
+
+import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
@@ -16,4 +15,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByCpf(String cpf);
 
     boolean existsByPapeisNome(TipoPapel nome);
+
+    Optional<Usuario> findById(Long id);
 }
