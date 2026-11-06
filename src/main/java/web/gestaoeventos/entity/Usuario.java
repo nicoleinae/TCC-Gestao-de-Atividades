@@ -74,6 +74,9 @@ public class Usuario extends Auditable {
     @Column(name = "ativo")
     private boolean ativo = true;
 
+    @Column(name = "carteirinha_hash", unique = true, length = 64)
+    private String carteirinhaHash;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "UsuarioPapel",

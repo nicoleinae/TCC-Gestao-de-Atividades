@@ -16,7 +16,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Presenca", uniqueConstraints = @jakarta.persistence.UniqueConstraint(columnNames = {"usuario_id", "atividade_id"}))
+@Table(
+        name = "Presenca",
+        uniqueConstraints = @jakarta.persistence.UniqueConstraint(
+                name = "uk_presenca_inscricao",
+                columnNames = "inscricao_id"))
 @Getter @Setter
 public class Presenca {
 
@@ -25,12 +29,11 @@ public class Presenca {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inscricao_id", nullable = false, unique = true)
+    @JoinColumn(name = "inscricao_id", nullable = false)
     private Inscricao inscricao;
 
     @CreationTimestamp
-    @Column(name = "data_presenca", updatable = false)
+    @Column(name = "data_presenca", nullable = false, updatable = false)
     private LocalDateTime dataPresenca;
 
 }
-
