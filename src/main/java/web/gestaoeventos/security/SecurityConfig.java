@@ -90,12 +90,6 @@ public class SecurityConfig {
                         .requestMatchers("/atividades/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/instituicoes/**").authenticated()
                         .requestMatchers("/papeis/**", "/usuarios/*/papel").hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.POST, "/solicitacoes-colaborador")
-                        .authenticated()
-                        .requestMatchers(HttpMethod.GET, "/solicitacoes-colaborador/**")
-                        .hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.PUT, "/solicitacoes-colaborador/**")
-                        .hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

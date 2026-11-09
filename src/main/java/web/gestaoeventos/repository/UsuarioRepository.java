@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import web.gestaoeventos.entity.Usuario;
 import web.gestaoeventos.entity.enums.TipoPapel;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -19,6 +20,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByCpf(String cpf);
 
     boolean existsByPapeisNome(TipoPapel nome);
+
+    List<Usuario> findAllByInstituicoes_IdAndAtivoTrueOrderByNomeAsc(Long instituicaoId);
+
+    Optional<Usuario> findByIdAndAtivoTrue(Long id);
 
     Optional<Usuario> findById(Long id);
 }

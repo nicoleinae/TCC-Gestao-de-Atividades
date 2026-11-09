@@ -39,4 +39,15 @@ public final class InstituicaoDtos {
             Long responsavelId,
             boolean ativo) {
     }
+
+    public record AdicionarColaboradorRequest(
+            @NotBlank @Email @Size(max = 150) String email) {
+    }
+
+    public record ColaboradorResponse(
+            Long usuarioId,
+            String nome,
+            String email,
+            Long instituicaoId) {
+    }
 }
