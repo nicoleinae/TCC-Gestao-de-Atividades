@@ -100,6 +100,12 @@ public class InscricaoService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<Long> listarAtividadesInscritas(String email) {
+        Usuario usuario = buscarUsuario(email);
+        return inscricaoRepository.findAtividadeIdsByUsuarioId(usuario.getId());
+    }
+
     private Usuario buscarUsuario(String email) {
         return usuarioRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new ResponseStatusException(

@@ -22,4 +22,7 @@ public final class UsuarioDtos {
             Set<String> papeis,
             Set<Long> instituicaoIds) {
     }
+
+    public record UsuarioMeResponse(Long id) {
+    }
 }

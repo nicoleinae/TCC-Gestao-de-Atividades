@@ -15,6 +15,9 @@ public interface InscricaoRepository extends JpaRepository<Inscricao, Long> {
 
     Optional<Inscricao> findByUsuarioIdAndAtividadeId(Long usuarioId, Long atividadeId);
 
+    @Query("select inscricao.atividade.id from Inscricao inscricao where inscricao.usuario.id = :usuarioId")
+    List<Long> findAtividadeIdsByUsuarioId(@Param("usuarioId") Long usuarioId);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select inscricao from Inscricao inscricao where inscricao.id = :id")
     Optional<Inscricao> findByIdForUpdate(@Param("id") Long id);

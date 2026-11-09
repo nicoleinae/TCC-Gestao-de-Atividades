@@ -15,7 +15,7 @@ import web.gestaoeventos.service.InscricaoService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/atividades/{atividadeId}")
+@RequestMapping("/atividades")
 public class InscricaoController {
 
     private final InscricaoService inscricaoService;
@@ -24,7 +24,7 @@ public class InscricaoController {
         this.inscricaoService = inscricaoService;
     }
 
-    @PostMapping("/inscricoes")
+    @PostMapping("/{atividadeId}/inscricoes")
     @ResponseStatus(HttpStatus.CREATED)
     public InscricaoResponse inscrever(
             Authentication authentication,
@@ -32,7 +32,7 @@ public class InscricaoController {
         return inscricaoService.inscrever(authentication.getName(), atividadeId);
     }
 
-    @DeleteMapping("/inscricoes")
+    @DeleteMapping("/{atividadeId}/inscricoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desinscrever(
             Authentication authentication,
@@ -40,10 +40,15 @@ public class InscricaoController {
         inscricaoService.desinscrever(authentication.getName(), atividadeId);
     }
 
-    @GetMapping("/inscritos")
+    @GetMapping("/{atividadeId}/inscritos")
     public List<InscricaoResponse> listarInscritos(
             Authentication authentication,
             @PathVariable Long atividadeId) {
         return inscricaoService.listarInscritos(authentication.getName(), atividadeId);
+    }
+
+    @GetMapping("/inscricoes/minhas")
+    public List<Long> listarMinhasInscricoes(Authentication authentication) {
+        return inscricaoService.listarAtividadesInscritas(authentication.getName());
     }
 }
