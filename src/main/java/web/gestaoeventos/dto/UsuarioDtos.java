@@ -23,6 +23,6 @@ public final class UsuarioDtos {
             Set<Long> instituicaoIds) {
     }
 
-    public record UsuarioMeResponse(Long id) {
+    public record UsuarioMeResponse(Long id, String nome) {
     }
 }

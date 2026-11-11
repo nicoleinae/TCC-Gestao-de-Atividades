@@ -77,6 +77,9 @@ public class Usuario extends Auditable {
     @Column(name = "carteirinha_hash", unique = true, length = 64)
     private String carteirinhaHash;
 
+    @Column(name = "carteirinha_codigo_criptografado", length = 200)
+    private String carteirinhaCodigoCriptografado;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "UsuarioPapel",
