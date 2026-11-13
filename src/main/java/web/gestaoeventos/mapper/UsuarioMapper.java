@@ -9,7 +9,6 @@ import web.gestaoeventos.entity.Usuario;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UsuarioMapper {
 
-    @Mapping(target = "papeis", expression = "java(usuario.getPapeis().stream().map(p -> p.getNome().name()).collect(java.util.stream.Collectors.toUnmodifiableSet()))")
     @Mapping(target = "instituicaoIds", expression = "java(usuario.getInstituicoes().stream().map(i -> i.getId()).collect(java.util.stream.Collectors.toUnmodifiableSet()))")
     UsuarioDtos.UsuarioResponse toResponse(Usuario usuario);
 

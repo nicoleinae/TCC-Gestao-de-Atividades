@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import web.gestaoeventos.entity.Usuario;
-import web.gestaoeventos.entity.enums.TipoPapel;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +25,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByCpf(String cpf);
 
     Optional<Usuario> findByCpf(String cpf);
-
-    boolean existsByPapeisNome(TipoPapel nome);
 
     List<Usuario> findAllByInstituicoes_IdAndAtivoTrueOrderByNomeAsc(Long instituicaoId);
 

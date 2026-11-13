@@ -9,7 +9,7 @@ import web.gestaoeventos.entity.Login;
 
 public interface LoginRepository extends JpaRepository<Login, Long> {
 
-    @EntityGraph(attributePaths = {"usuario", "usuario.papeis"})
+    @EntityGraph(attributePaths = "usuario")
     Optional<Login> findByEmailIgnoreCase(String email);
 
     boolean existsByEmailIgnoreCase(String email);

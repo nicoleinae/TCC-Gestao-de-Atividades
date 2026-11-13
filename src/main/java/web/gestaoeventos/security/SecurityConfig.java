@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,14 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import web.gestaoeventos.entity.enums.TipoPapel;
 import web.gestaoeventos.repository.LoginRepository;
 
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -62,10 +59,7 @@ public class SecurityConfig {
                 .filter(login -> login.getUsuario().isAtivo())
                 .map(login -> User.withUsername(login.getEmail())
                         .password(login.getSenha())
-                        .authorities(login.getUsuario().getPapeis().stream()
-                                .filter(papel -> papel.getNome() != TipoPapel.COLABORADOR)
-                                .map(papel -> "ROLE_" + papel.getNome())
-                                .toArray(String[]::new))
+                        .authorities(new String[0])
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Credenciais inválidas"));
     }
@@ -89,7 +83,6 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/", "/index.html", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/atividades/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/instituicoes/**").authenticated()
-                        .requestMatchers("/papeis/**", "/usuarios/*/papel").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

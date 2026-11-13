@@ -26,7 +26,6 @@ public interface AuthMapper {
     @Mapping(target = "estado", source = "estado", qualifiedByName = "normalizarEstado")
     @Mapping(target = "cep", source = "cep", qualifiedByName = "normalizarCep")
     @Mapping(target = "ativo", constant = "true")
-    @Mapping(target = "papeis", ignore = true)
     @Mapping(target = "instituicoes", ignore = true)
     Usuario toUsuario(CadastroDtos.CadastroRequest request);
 

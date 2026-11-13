@@ -82,14 +82,6 @@ public class Usuario extends Auditable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "UsuarioPapel",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "papel_id")
-    )
-    private Set<Papel> papeis = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
             name = "UsuarioInstituicao",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "instituicao_id"),

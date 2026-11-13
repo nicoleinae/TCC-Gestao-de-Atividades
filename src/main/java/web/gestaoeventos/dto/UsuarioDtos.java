@@ -19,7 +19,6 @@ public final class UsuarioDtos {
             String email,
             String telefone,
             boolean ativo,
-            Set<String> papeis,
             Set<Long> instituicaoIds) {
     }
 
