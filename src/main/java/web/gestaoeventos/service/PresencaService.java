@@ -20,6 +20,7 @@ import web.gestaoeventos.repository.UsuarioRepository;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,15 +154,19 @@ public class PresencaService {
     private void validarOperador(Usuario operador, Atividade atividade) {
         boolean responsavel = atividade.getInstituicao().getResponsavel() != null
                 && atividade.getInstituicao().getResponsavel().getId().equals(operador.getId());
+        boolean colaborador = operador.getInstituicoes().stream()
+                .anyMatch(instituicao -> Objects.equals(
+                        instituicao.getId(),
+                        atividade.getInstituicao().getId()));
         boolean auxiliarAtivo = auxiliarRepository
                 .existsByAtividadeIdAndAuxiliarIdAndAtivoTrue(
                         atividade.getId(),
                         operador.getId());
 
-        if (!responsavel && !auxiliarAtivo) {
+        if (!responsavel && !colaborador && !auxiliarAtivo) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
-                    "Somente o responsável da instituição ou auxiliar ativo pode registrar presença");
+                    "Somente colaborador da instituição ou auxiliar ativo pode registrar presença");
         }
     }
 }
